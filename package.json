@@ -19,7 +19,8 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "test": "mocha -r ts-node/register src/**/*.spec.ts"
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "prepublish": "tsc"
   },
   "dependencies": {}
 }
