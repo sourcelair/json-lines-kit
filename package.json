@@ -1,0 +1,17 @@
+{
+  "name": "json-lines-kit",
+  "version": "0.1.0",
+  "description": "Lightweight toolkit for dealing with JSON lines",
+  "main": "lib/main.js",
+  "repository": "https://github.com/sourcelair/json-lines-kit",
+  "author": "Paris Kasidiaris <paris@sourcelair.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "typescript": "^2.8.3"
+  },
+  "script": {
+    "tsc": "tsc"
+  },
+  "dependencies": {}
+}
