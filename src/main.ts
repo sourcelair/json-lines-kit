@@ -1,6 +1,3 @@
-const NEW_LINE = '\n';
-
-
 export class JSONLinesStream {
   private buffer: string = '';
 
@@ -13,19 +10,21 @@ export class JSONLinesStream {
   }
   
   private popLineFromBuffer() {
-    const firstNewLine = this.buffer.indexOf(NEW_LINE) + 1;
+    // What we call here a "New Line Cluster" is multiple consecutive new lines (\n) together
+    const firstNewLineCluster = this.buffer.match(/(\n+)/);
     
-    // No new line was read, there is nothing to do here.
-    if (firstNewLine) {
-      return;
+    // No new line cluster was read, there is nothing to do here.
+    if (!firstNewLineCluster) {
+      return null;
     }
     
-    const candidateJsonLine = this.buffer.slice(0, firstNewLine).trim();
+    const firstNewLineBreakPoint = firstNewLineCluster.index + firstNewLineCluster[1].length;
+    const candidateJsonLine = this.buffer.slice(0, firstNewLineBreakPoint).trim();
     
     try {
       const line = JSON.parse(candidateJsonLine);
 
-      this.buffer = this.buffer.slice(firstNewLine);
+      this.buffer = this.buffer.slice(firstNewLineBreakPoint);
 
       return line;
     } catch (e) {
@@ -43,11 +42,14 @@ export class JSONLinesStream {
   }
 
   private consumeBuffer() {
-    let line = this.popLineFromBuffer();
-    
+    let line;
+
     do {
-      this.emit(line);
       line = this.popLineFromBuffer();
+      
+      if (line) {
+        this.emit(line);
+      }
     } while (line);
   }
 
